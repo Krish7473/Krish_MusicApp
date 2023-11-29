@@ -1,22 +1,30 @@
 package algonquin.cst2335.finalproject;
 
 public class KpSongs {
+    private int id;
     private String title;
     private String duration;
     private String album;
 
-    // Constructors
     public KpSongs() {
-        // Default constructor
+        // Empty constructor
     }
 
-    public KpSongs(String title, String duration, String album) {
+    public KpSongs(int id, String title, String duration, String album) {
+        this.id = id;
         this.title = title;
         this.duration = duration;
         this.album = album;
     }
 
-    // Getters and setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }

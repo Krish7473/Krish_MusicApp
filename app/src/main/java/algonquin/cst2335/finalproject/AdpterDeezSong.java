@@ -4,15 +4,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
-public class DeezerSongsAdapter extends RecyclerView.Adapter<DeezerSongsAdapter.SongViewHolder> {
+public class AdpterDeezSong extends RecyclerView.Adapter<AdpterDeezSong.SongViewHolder> {
 
-    private List<DeezerSong> songList;
+    private List<KpSongs> songList;
 
-    public DeezerSongsAdapter(List<DeezerSong> songList) {
+    public AdpterDeezSong(List<KpSongs> songList) {
         this.songList = songList;
     }
 
@@ -25,7 +27,7 @@ public class DeezerSongsAdapter extends RecyclerView.Adapter<DeezerSongsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
-        DeezerSong song = songList.get(position);
+        KpSongs song = songList.get(position);
         holder.bind(song);
     }
 
@@ -38,14 +40,13 @@ public class DeezerSongsAdapter extends RecyclerView.Adapter<DeezerSongsAdapter.
         TextView textSongTitle;
         TextView textSongDuration;
 
-        public SongViewHolder(View itemView) {
+        public SongViewHolder(@NonNull View itemView) {
             super(itemView);
             textSongTitle = itemView.findViewById(R.id.textSongTitle);
             textSongDuration = itemView.findViewById(R.id.textSongDuration);
-
         }
 
-        public void bind(DeezerSong song) {
+        public void bind(KpSongs song) {
             textSongTitle.setText(song.getTitle());
             textSongDuration.setText(song.getDuration());
             // Bind other song details to respective views here if needed

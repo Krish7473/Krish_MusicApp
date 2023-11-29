@@ -1,91 +1,81 @@
 package algonquin.cst2335.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText artistEditText;
     private Button searchButton;
+    private RecyclerView recyclerView;
+    private AdpterDeezSong songsAdapter;
+    private List<KpSongs> songList;
+    private DrezApiMangr apiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize views
         artistEditText = findViewById(R.id.artistEditText);
         searchButton = findViewById(R.id.searchButton);
+        recyclerView = findViewById(R.id.recyclerView);
 
-        // Set onClick listener for search button
+        songList = new ArrayList<>();
+        songsAdapter = new AdpterDeezSong(songList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(songsAdapter);
+
+        apiManager = new DrezApiMangr(this);
+
         searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 String artistName = artistEditText.getText().toString().trim();
                 if (!artistName.isEmpty()) {
-                    // Perform Deezer API search
                     performDeezerAPISearch(artistName);
                 } else {
-                    // Handle empty input
+                    Toast.makeText(MainActivity.this, "Please enter an artist name", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        SharedPreferences preferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
+        String previousSearch = preferences.getString("searchTerm", "");
+        artistEditText.setText(previousSearch);
     }
 
-    private void searchForArtist(String artistQuery) {
-        String url = "https://api.deezer.com/search/artist/?q=" + artistQuery;
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Handle successful response - Parse JSON response for artist information
-                        // Display artist information to the user
-                        // Here you can process the response received from the API call
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            JSONArray data = jsonResponse.getJSONArray("data"); // Extract artist data array
-
-                            // Iterate through artist data to get details
-                            for (int i = 0; i < data.length(); i++) {
-                                JSONObject artist = data.getJSONObject(i);
-                                String tracklistURL = artist.getString("tracklist");
-
-                                // Make another API call using this tracklistURL to fetch songs
-                                // Construct URL and use Volley similar to the previous API call
-                                // This part would involve a similar Volley request to fetch the song details
-                                // Handle the song details response as needed
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+    private void performDeezerAPISearch(String artistName) {
+        apiManager.performDeezerAPISearch(artistName, new DrezApiMangr.DeezerApiCallback() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                // Handle errors
-                // Here you can handle any errors that occur during the API call
+            public void onSuccess(List<KpSongs> fetchedSongList) {
+                songList.clear();
+                songList.addAll(fetchedSongList);
+                songsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        // Save the search term in SharedPreferences
+        SharedPreferences.Editor editor = getSharedPreferences("SearchPrefs", MODE_PRIVATE).edit();
+        editor.putString("searchTerm", artistName);
+        editor.apply();
     }
+
+    // onCreateOptionsMenu, onOptionsItemSelected, showInstructionsDialog methods remain unchanged
 }
