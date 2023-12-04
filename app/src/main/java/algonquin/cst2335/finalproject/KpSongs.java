@@ -1,17 +1,18 @@
 package algonquin.cst2335.finalproject;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "songs")
 public class KpSongs {
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
     private String title;
     private String duration;
     private String album;
 
-    public KpSongs() {
-        // Empty constructor
-    }
-
-    public KpSongs(int id, String title, String duration, String album) {
-        this.id = id;
+    public KpSongs(String title, String duration, String album) {
         this.title = title;
         this.duration = duration;
         this.album = album;

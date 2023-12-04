@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="@+id/titleTextView"
         app:layout_constraintTop_toBottomOf="@+id/albumTextView"
         android:layout_marginTop="16dp"
-        android:src="@drawable/image" />
+         />
 
     <Button
         android:id="@+id/saveButton"

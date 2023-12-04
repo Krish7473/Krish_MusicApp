@@ -4,16 +4,20 @@ plugins {
 
 android {
     namespace 'algonquin.cst2335.finalproject'
-    compileSdk 33
+    compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
     defaultConfig {
-        applicationId "algonquin.cst2335.finalproject"
-        minSdk 22
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        applicationId = "algonquin.cst2335.pate"
+        minSdk = 22
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,6 +33,10 @@ android {
 }
 
 dependencies {
+
+    def room_version = "2.6.0"
+    implementation ("androidx.room:room-runtime:$room_version")
+    annotationProcessor ("androidx.room:room-compiler:$room_version")
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'

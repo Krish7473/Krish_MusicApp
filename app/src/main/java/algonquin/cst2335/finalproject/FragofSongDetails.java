@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 public class FragofSongDetails extends Fragment {
 
     private KpSongs selectedSong;
+    private DezDatabseMang database;
 
     public FragofSongDetails() {
         // Required empty public constructor
@@ -48,8 +50,12 @@ public class FragofSongDetails extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Save the song data to the database
-                // You need to implement the saving functionality here
+                if (selectedSong != null) {
+                    // Save the song data to the database
+                    saveSongToDatabase(selectedSong);
+                } else {
+                    Toast.makeText(requireContext(), "No song selected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -57,5 +63,17 @@ public class FragofSongDetails extends Fragment {
     // Method to set selected song
     public void setSelectedSong(KpSongs song) {
         selectedSong = song;
+    }
+
+    // Method to save song to the database
+    private void saveSongToDatabase(KpSongs song) {
+        if (database == null) {
+            database = DezDatabseMang.getInstance(requireContext()); // Assuming you have a static getInstance method
+        }
+
+        DezrSongDAO songDAO = database.dezrSongDAO();
+        songDAO.insertSong(song);
+
+        Toast.makeText(requireContext(), "Song saved to favorites", Toast.LENGTH_SHORT).show();
     }
 }
