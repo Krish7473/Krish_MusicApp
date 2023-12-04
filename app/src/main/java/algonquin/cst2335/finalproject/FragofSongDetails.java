@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +23,7 @@ public class FragofSongDetails extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.song_fragment, container, false);
+        return inflater.inflate(R.layout.songs_fragment, container, false);
     }
 
     @Override
@@ -34,7 +33,6 @@ public class FragofSongDetails extends Fragment {
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         TextView durationTextView = view.findViewById(R.id.durationTextView);
         TextView albumTextView = view.findViewById(R.id.albumTextView);
-        ImageView albumCoverImageView = view.findViewById(R.id.albumCoverImageView);
         Button saveButton = view.findViewById(R.id.saveButton);
 
         // Check if selectedSong is not null and display its details
@@ -42,10 +40,7 @@ public class FragofSongDetails extends Fragment {
             titleTextView.setText(selectedSong.getTitle());
             durationTextView.setText(selectedSong.getDuration());
             albumTextView.setText(selectedSong.getAlbum());
-            // Set album cover image if available
-            // albumCoverImageView.setImageResource(selectedSong.getAlbumCover()); // You need to implement this
         }
-
         // Implement functionality for the save button
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

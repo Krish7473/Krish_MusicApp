@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -36,12 +37,15 @@ public class AdpterDeezSong extends RecyclerView.Adapter<AdpterDeezSong.SongView
         return songList.size();
     }
 
+    // Inside the AdpterDeezSong class
     static class SongViewHolder extends RecyclerView.ViewHolder {
         TextView textSongTitle;
         TextView textSongDuration;
+        View itemView;
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
             textSongTitle = itemView.findViewById(R.id.textSongTitle);
             textSongDuration = itemView.findViewById(R.id.textSongDuration);
         }
@@ -49,7 +53,21 @@ public class AdpterDeezSong extends RecyclerView.Adapter<AdpterDeezSong.SongView
         public void bind(KpSongs song) {
             textSongTitle.setText(song.getTitle());
             textSongDuration.setText(song.getDuration());
-            // Bind other song details to respective views here if needed
+
+            // Handle item click to show song details in FragofSongDetails fragment
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragofSongDetails fragment = new FragofSongDetails();
+                    fragment.setSelectedSong(song);
+
+                    AppCompatActivity activity = (AppCompatActivity) itemView.getContext();
+                    activity.getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.textSongTitle, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
         }
     }
 }

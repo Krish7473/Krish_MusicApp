@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
         artistEditText.setText(previousSearch);
     }
 
+    // Inside the performDeezerAPISearch method
     private void performDeezerAPISearch(String artistName) {
         String deezerAPIUrl = "https://api.deezer.com/search/artist/?q=" + artistName;
 
-        // Using Volley for API call
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, deezerAPIUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
                                             public void onResponse(JSONObject songRequest) {
                                                 try {
                                                     JSONArray albumData = songRequest.getJSONArray("data");
+
+                                                    // Create a new list to store songs for each album
+                                                    List<KpSongs> songsForAlbum = new ArrayList<>();
+
                                                     for (int k = 0; k < albumData.length(); k++) {
                                                         JSONObject thisAlbum = albumData.getJSONObject(k);
                                                         String title = thisAlbum.getString("title");
@@ -99,11 +103,14 @@ public class MainActivity extends AppCompatActivity {
                                                         String album = anAlbum.getString("picture_small");
                                                         String name = anAlbum.getString("name");
 
-                                                        // Create KpSongs object and add to songList
+                                                        // Create KpSongs object and add to the album's song list
                                                         KpSongs song = new KpSongs(title, String.valueOf(duration), name);
-                                                        songList.add(song);
-                                                        songsAdapter.notifyDataSetChanged(); // Notify adapter
+                                                        songsForAlbum.add(song);
                                                     }
+
+                                                    // Add all songs for the current album to the main songList
+                                                    songList.addAll(songsForAlbum);
+                                                    songsAdapter.notifyDataSetChanged(); // Notify adapter
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -141,6 +148,4 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(MainActivity.this, "Searching for artist: " + artistName, Toast.LENGTH_SHORT).show();
     }
-
-    // Other methods
 }

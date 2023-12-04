@@ -1,19 +1,19 @@
-package algonquin.cst2335.finalproject;
+    package algonquin.cst2335.finalproject;
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.Query;
+    import androidx.room.Dao;
+    import androidx.room.Insert;
+    import androidx.room.Query;
 
-import java.util.List;
+    import java.util.List;
 
-@Dao
-public interface DezrSongDAO {
+    @Dao
+    public interface DezrSongDAO {
 
-    @Insert
-    void insertSong(KpSongs song);
+        @Insert
+        void insertSong(KpSongs song);
 
-    @Query("SELECT * FROM songs")
-    List<KpSongs> getAllSongs();
+        @Query("SELECT * FROM songs")
+        List<KpSongs> getAllSongs();
 
-    // Add more queries as needed (delete, update, etc.)
-}
+        // Add more queries as needed (delete, update, etc.)
+    }
