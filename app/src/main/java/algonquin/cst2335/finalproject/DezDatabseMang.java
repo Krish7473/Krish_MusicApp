@@ -1,28 +1,25 @@
 package algonquin.cst2335.finalproject;
 
+import android.content.Context;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import android.content.Context;
-
-@Database(entities = {KpSongs.class}, version = 1)
+@Database(entities = {KpSongs.class}, version = 1, exportSchema = false)
 public abstract class DezDatabseMang extends RoomDatabase {
 
-    public abstract DezrSongDAO dezrSongDAO();
+    private static DezDatabseMang instance;
 
-    private static volatile DezDatabseMang INSTANCE;
+    public abstract DezrSongDAO songDAO();
 
-    public static DezDatabseMang getInstance(Context context) {
-        if (INSTANCE == null) {
-            synchronized (DezDatabseMang.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    DezDatabseMang.class, "song_database")
-                            .build();
-                }
-            }
+    public static synchronized DezDatabseMang getInstance(Context context) {
+        if (instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(),
+                            DezDatabseMang.class, "deezer_database")
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
-        return INSTANCE;
+        return instance;
     }
 }

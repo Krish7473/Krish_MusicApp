@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -22,14 +21,19 @@ public class AdpterDeezSong extends RecyclerView.Adapter<AdpterDeezSong.SongView
     @NonNull
     @Override
     public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.songs_itm, parent, false);
-        return new SongViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.song_item, parent, false);
+        return new SongViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         KpSongs song = songList.get(position);
-        holder.bind(song);
+        holder.titleTextView.setText(song.getTitle());
+        holder.durationTextView.setText(song.getDuration());
+        holder.albumTextView.setText(song.getAlbumName());
+        // Set album cover image using Picasso or Glide library or by loading the image from URL
+        // Example: Glide.with(holder.itemView.getContext()).load(song.getAlbumCover()).into(holder.albumCoverImageView);
     }
 
     @Override
@@ -37,37 +41,14 @@ public class AdpterDeezSong extends RecyclerView.Adapter<AdpterDeezSong.SongView
         return songList.size();
     }
 
-    // Inside the AdpterDeezSong class
     static class SongViewHolder extends RecyclerView.ViewHolder {
-        TextView textSongTitle;
-        TextView textSongDuration;
-        View itemView;
+        TextView titleTextView, durationTextView, albumTextView;
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemView = itemView;
-            textSongTitle = itemView.findViewById(R.id.textSongTitle);
-            textSongDuration = itemView.findViewById(R.id.textSongDuration);
-        }
-
-        public void bind(KpSongs song) {
-            textSongTitle.setText(song.getTitle());
-            textSongDuration.setText(song.getDuration());
-
-            // Handle item click to show song details in FragofSongDetails fragment
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragofSongDetails fragment = new FragofSongDetails();
-                    fragment.setSelectedSong(song);
-
-                    AppCompatActivity activity = (AppCompatActivity) itemView.getContext();
-                    activity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.textSongTitle, fragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            durationTextView = itemView.findViewById(R.id.durationTextView);
+            albumTextView = itemView.findViewById(R.id.albumTextView);
         }
     }
 }

@@ -52,15 +52,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(songsAdapter);
 
         // Set OnClickListener for Button
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String artistName = artistEditText.getText().toString().trim();
-                if (!artistName.isEmpty()) {
-                    performDeezerAPISearch(artistName);
-                } else {
-                    Toast.makeText(MainActivity.this, "Please enter an artist name", Toast.LENGTH_SHORT).show();
-                }
+        searchButton.setOnClickListener(v -> {
+            String artistName = artistEditText.getText().toString().trim();
+            if (!artistName.isEmpty()) {
+                performDeezerAPISearch(artistName);
+            } else {
+                Toast.makeText(MainActivity.this, "Please enter an artist name", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -72,72 +69,30 @@ public class MainActivity extends AppCompatActivity {
 
     // Inside the performDeezerAPISearch method
     private void performDeezerAPISearch(String artistName) {
+        // Deezer API URL for artist search
         String deezerAPIUrl = "https://api.deezer.com/search/artist/?q=" + artistName;
 
+        // RequestQueue for API calls
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, deezerAPIUrl, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray results = response.getJSONArray("data");
-                            for (int i = 0; i < results.length(); i++) {
-                                JSONObject anAlbum = results.getJSONObject(i);
-                                String tracklist = anAlbum.getString("tracklist");
+                response -> {
+                    try {
+                        JSONArray results = response.getJSONArray("data");
+                        for (int i = 0; i < results.length(); i++) {
+                            JSONObject anArtist = results.getJSONObject(i);
+                            String tracklist = anArtist.getString("tracklist");
 
-                                // Nested Volley request for individual song details
-                                JsonObjectRequest songLookup = new JsonObjectRequest(Request.Method.GET, tracklist, null,
-                                        new Response.Listener<JSONObject>() {
-                                            @Override
-                                            public void onResponse(JSONObject songRequest) {
-                                                try {
-                                                    JSONArray albumData = songRequest.getJSONArray("data");
-
-                                                    // Create a new list to store songs for each album
-                                                    List<KpSongs> songsForAlbum = new ArrayList<>();
-
-                                                    for (int k = 0; k < albumData.length(); k++) {
-                                                        JSONObject thisAlbum = albumData.getJSONObject(k);
-                                                        String title = thisAlbum.getString("title");
-                                                        int duration = thisAlbum.getInt("duration");
-                                                        String album = anAlbum.getString("picture_small");
-                                                        String name = anAlbum.getString("name");
-
-                                                        // Create KpSongs object and add to the album's song list
-                                                        KpSongs song = new KpSongs(title, String.valueOf(duration), name);
-                                                        songsForAlbum.add(song);
-                                                    }
-
-                                                    // Add all songs for the current album to the main songList
-                                                    songList.addAll(songsForAlbum);
-                                                    songsAdapter.notifyDataSetChanged(); // Notify adapter
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                // Handle error while fetching song details
-                                            }
-                                        });
-
-                                queue.add(songLookup);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            // Call method to fetch tracklist and songs
+                            fetchTracklistAndSongs(tracklist);
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error while making API call
-                        Toast.makeText(MainActivity.this, "Error occurred: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                error -> Toast.makeText(MainActivity.this, "Error occurred: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        );
 
+        // Adding the API request to the queue
         queue.add(jsonObjectRequest);
 
         // Storing user's search term in SharedPreferences
@@ -147,5 +102,41 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         Toast.makeText(MainActivity.this, "Searching for artist: " + artistName, Toast.LENGTH_SHORT).show();
+    }
+
+    private void fetchTracklistAndSongs(String tracklistUrl) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest songLookup = new JsonObjectRequest(Request.Method.GET, tracklistUrl, null,
+                response -> {
+                    try {
+                        JSONArray albumData = response.getJSONArray("data");
+
+                        // Create a new list to store songs for each album
+                        List<KpSongs> songsForAlbum = new ArrayList<>();
+
+                        for (int k = 0; k < albumData.length(); k++) {
+                            JSONObject thisSong = albumData.getJSONObject(k);
+                            String title = thisSong.getString("title");
+                            int duration = thisSong.getInt("duration");
+                            String album = thisSong.getString("album");
+                            String albumCover = thisSong.getString("album_cover");
+
+                            // Create KpSongs object and add to the album's song list
+                            KpSongs song = new KpSongs(title, String.valueOf(duration), album, albumCover);
+                            songsForAlbum.add(song);
+                        }
+
+                        // Add all songs for the current album to the main songList
+                        songList.addAll(songsForAlbum);
+                        songsAdapter.notifyDataSetChanged(); // Notify adapter
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Toast.makeText(MainActivity.this, "Error fetching song details", Toast.LENGTH_SHORT).show()
+        );
+
+        // Adding the request to the queue
+        queue.add(songLookup);
     }
 }

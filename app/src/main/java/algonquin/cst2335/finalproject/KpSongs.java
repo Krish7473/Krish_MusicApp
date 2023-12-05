@@ -10,12 +10,14 @@ public class KpSongs {
 
     private String title;
     private String duration;
-    private String album;
+    private String albumName;
+    private String albumCover;
 
-    public KpSongs(String title, String duration, String album) {
+    public KpSongs(String title, String duration, String albumName, String albumCover) {
         this.title = title;
         this.duration = duration;
-        this.album = album;
+        this.albumName = albumName;
+        this.albumCover = albumCover;
     }
 
     public int getId() {
@@ -42,11 +44,19 @@ public class KpSongs {
         this.duration = duration;
     }
 
-    public String getAlbum() {
-        return album;
+    public String getAlbumName() {
+        return albumName;
     }
 
-    public void setAlbum(String album) {
-        this.album = album;
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    public String getAlbumCover() {
+        return albumCover;
+    }
+
+    public void setAlbumCover(String albumCover) {
+        this.albumCover = albumCover;
     }
 }
