@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import algonquin.cst2335.finalproject.databinding.AlbumViewHolderBinding;
 import algonquin.cst2335.finalproject.databinding.DeezerMainActivityBinding;
-import algonquin.cst2335.finalproject.R;
+
 
 public class DeezerMainActivity extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
