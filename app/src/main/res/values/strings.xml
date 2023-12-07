@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Final Project</string>
+    <string name="app_name">Welcome to Deezer</string>
+    <string name="SearchArtist">Search For Your Artists Here</string>
+    <string name="SearchSong">Search Your Favourite Song</string>
+    <string name="playlistPage">Playlist</string>
+    <string name="search">Search</string>
 </resources>

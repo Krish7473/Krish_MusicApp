@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">डीज़र में आपका स्वागत है!</string>
+    <string name="SearchArtist">यहां अपने कलाकारों को खोजें</string>
+    <string name="SearchSong">अपने पसंदीदा गाने को यहां खोजें</string>
+    <string name="playlistPage">हिन्दू प्लेलिस्ट</string>
+    <string name="search">खोजें</string>
+</resources>
