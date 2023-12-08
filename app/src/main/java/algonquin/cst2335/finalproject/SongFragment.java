@@ -31,8 +31,6 @@ import algonquin.cst2335.finalproject.databinding.SongfragmentBinding;
 public class SongFragment extends Fragment {
 
     // UI elements
-    private TextView songNameTextView, artistNameTextView, durationTextView;
-    private ImageView albumCoverImageView;
     private SongfragmentBinding binding;  // View binding for efficient view access
 
     // Data variables for song details

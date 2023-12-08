@@ -47,12 +47,10 @@ public class AlbumDetailFragment extends Fragment {
     private List<SongsEntity> songsList;
     private List<SongsEntity> favsList;
     private RequestQueue queue;
-    private MediaPlayer mediaPlayer;
 
-    private SongsDatabase songsDatabase;
     private SongsViewModel songModel;
     private AlbumEntity album;
-    private SongsEntity track;
+
 
     /**
      * Constructor for AlbumDetailFragment.

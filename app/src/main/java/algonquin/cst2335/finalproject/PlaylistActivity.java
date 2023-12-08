@@ -312,32 +312,6 @@ public class PlaylistActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Handles options menu item selection.
-     * @param item The selected menu item.
-     * @return true if the item is successfully handled.
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sunrise:
-//                startActivity(new Intent(this, SunriseMain.class));
-                break;
-            case R.id.dictionary:
-//                startActivity(new Intent(this, DictionaryActivity.class));
-                break;
-            case R.id.recipe:
-//                startActivity(new Intent(this, RecipeMain.class));
-                break;
-            case R.id.info:
-                AlertDialog.Builder builder = new AlertDialog.Builder(PlaylistActivity.this);
-                builder.setMessage(("Info: \n Create your very own deezer playlists here \n 1. click on the Search Icon to look up your favourite artists and youll receive a list of their albums \n 2. Click on any album and all of their tracks within the album will be displayed for you to save \n 3. click on the 3 dotted icon to preview or save your song \n 4. Go ahead ahead and click the playlist icon and all of your favourite music will be displayed. \n 5. You are able to delete any song from your playlist with a click of a button. \n 6. Most important step Enjoy Deezer"))
-                        .setTitle("Welcome To Deezer")
-                        .setPositiveButton("Okay", (dialog, which) -> {
-                            dialog.dismiss();
-                        }).show();
-        }
-        return true;
     }
 
-}
+

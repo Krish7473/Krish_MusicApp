@@ -54,11 +54,8 @@ public class DeezerMainActivity extends AppCompatActivity {
 
     DeezerMainActivityBinding binding;
 
-    SongsViewModel songsModel;
-
     SharedPreferences sp;
-    AlbumViewHolderBinding ab;
-    SongsEntity song;
+
 
     protected Bitmap albumCover;
 
